@@ -6,7 +6,7 @@ window.config = {
   extensions: [],
   modes: [],
   customizationService: {},
-  showStudyList: true,
+  showStudyList: false,
   // some windows systems have issues with more than 3 web workers
   maxNumberOfWebWorkers: 3,
   // below flag is for performance reasons, but it might not work for all servers
@@ -37,117 +37,6 @@ window.config = {
   // },
   dataSources: [
     {
-      namespace: '@ohif/extension-default.dataSourcesModule.dicomweb',
-      sourceName: 'dicomweb',
-      configuration: {
-        friendlyName: 'AWS S3 Static wado server',
-        name: 'aws',
-        wadoUriRoot: 'https://d14fa38qiwhyfd.cloudfront.net/dicomweb',
-        qidoRoot: 'https://d14fa38qiwhyfd.cloudfront.net/dicomweb',
-        wadoRoot: 'https://d14fa38qiwhyfd.cloudfront.net/dicomweb',
-        qidoSupportsIncludeField: false,
-        imageRendering: 'wadors',
-        thumbnailRendering: 'wadors',
-        enableStudyLazyLoad: true,
-        supportsFuzzyMatching: false,
-        supportsWildcard: true,
-        staticWado: true,
-        singlepart: 'bulkdata,video',
-        // whether the data source should use retrieveBulkData to grab metadata,
-        // and in case of relative path, what would it be relative to, options
-        // are in the series level or study level (some servers like series some study)
-        bulkDataURI: {
-          enabled: true,
-          relativeResolution: 'studies',
-          transform: url => url.replace('/pixeldata.mp4', '/rendered'),
-        },
-        omitQuotationForMultipartRequest: true,
-      },
-    },
-
-    {
-      namespace: '@ohif/extension-default.dataSourcesModule.dicomweb',
-      sourceName: 'ohif2',
-      configuration: {
-        friendlyName: 'AWS S3 Static wado secondary server',
-        name: 'aws',
-        wadoUriRoot: 'https://dd14fa38qiwhyfd.cloudfront.net/dicomweb',
-        qidoRoot: 'https://dd14fa38qiwhyfd.cloudfront.net/dicomweb',
-        wadoRoot: 'https://dd14fa38qiwhyfd.cloudfront.net/dicomweb',
-        qidoSupportsIncludeField: false,
-        supportsReject: false,
-        imageRendering: 'wadors',
-        thumbnailRendering: 'wadors',
-        enableStudyLazyLoad: true,
-        supportsFuzzyMatching: false,
-        supportsWildcard: true,
-        staticWado: true,
-        singlepart: 'bulkdata,video',
-        // whether the data source should use retrieveBulkData to grab metadata,
-        // and in case of relative path, what would it be relative to, options
-        // are in the series level or study level (some servers like series some study)
-        bulkDataURI: {
-          enabled: true,
-          relativeResolution: 'studies',
-        },
-        omitQuotationForMultipartRequest: true,
-      },
-    },
-    {
-      namespace: '@ohif/extension-default.dataSourcesModule.dicomweb',
-      sourceName: 'ohif3',
-      configuration: {
-        friendlyName: 'AWS S3 Static wado secondary server',
-        name: 'aws',
-        wadoUriRoot: 'https://d3t6nz73ql33tx.cloudfront.net/dicomweb',
-        qidoRoot: 'https://d3t6nz73ql33tx.cloudfront.net/dicomweb',
-        wadoRoot: 'https://d3t6nz73ql33tx.cloudfront.net/dicomweb',
-        qidoSupportsIncludeField: false,
-        supportsReject: false,
-        imageRendering: 'wadors',
-        thumbnailRendering: 'wadors',
-        enableStudyLazyLoad: true,
-        supportsFuzzyMatching: false,
-        supportsWildcard: true,
-        staticWado: true,
-        singlepart: 'bulkdata,video',
-        // whether the data source should use retrieveBulkData to grab metadata,
-        // and in case of relative path, what would it be relative to, options
-        // are in the series level or study level (some servers like series some study)
-        bulkDataURI: {
-          enabled: true,
-          relativeResolution: 'studies',
-        },
-        omitQuotationForMultipartRequest: true,
-      },
-    },
-
-    {
-      namespace: '@ohif/extension-default.dataSourcesModule.dicomweb',
-      sourceName: 'local5000',
-      configuration: {
-        friendlyName: 'Static WADO Local Data',
-        name: 'DCM4CHEE',
-        qidoRoot: 'http://localhost:5000/dicomweb',
-        wadoRoot: 'http://localhost:5000/dicomweb',
-        qidoSupportsIncludeField: false,
-        supportsReject: true,
-        supportsStow: true,
-        imageRendering: 'wadors',
-        thumbnailRendering: 'wadors',
-        enableStudyLazyLoad: true,
-        supportsFuzzyMatching: false,
-        supportsWildcard: true,
-        staticWado: true,
-        singlepart: 'video',
-        bulkDataURI: {
-          enabled: true,
-          relativeResolution: 'studies',
-        },
-      },
-    },
-
-    {
       namespace: '@ohif/extension-default.dataSourcesModule.dicomwebproxy',
       sourceName: 'dicomwebproxy',
       configuration: {
@@ -172,31 +61,27 @@ window.config = {
     },
   ],
   httpErrorHandler: error => {
-    // This is 429 when rejected from the public idc sandbox too often.
-    console.warn(error.status);
-
-    // Could use services manager here to bring up a dialog/modal if needed.
-    console.warn('test, navigate to https://ohif.org/');
+    console.warn(`Error during http request: ${error}`);
   },
-  // whiteLabeling: {
-  //   /* Optional: Should return a React component to be rendered in the "Logo" section of the application's Top Navigation bar */
-  //   createLogoComponentFn: function (React) {
-  //     return React.createElement(
-  //       'a',
-  //       {
-  //         target: '_self',
-  //         rel: 'noopener noreferrer',
-  //         className: 'text-purple-600 line-through',
-  //         href: '/',
-  //       },
-  //       React.createElement('img',
-  //         {
-  //           src: './assets/customLogo.svg',
-  //           className: 'w-8 h-8',
-  //         }
-  //       ))
-  //   },
-  // },
+  whiteLabeling: {
+    /* Optional: Should return a React component to be rendered in the "Logo" section of the application's Top Navigation bar */
+    createLogoComponentFn: function (React) {
+      return React.createElement(
+        'a',
+        {
+          target: '_self',
+          rel: 'noopener noreferrer',
+          className: 'text-purple-600 line-through',
+          href: '/',
+        },
+        React.createElement('img', {
+          src: 'https://cdn.apps.myisaachealth.com/images/logo.svg',
+          className: 'w-8 h-8',
+        })
+      );
+    },
+  },
+
   hotkeys: [
     {
       commandName: 'incrementActiveViewport',
